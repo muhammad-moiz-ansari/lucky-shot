@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lucky Shot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="icon" href="sprites/favicon.png" type="image/x-icon">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <img id="bg-img" src="sprites/field.png" alt="">
+  <div class="navbar">
+    <div class="target-scores">
+      <img src="sprites/target_scores.png" alt="target scores" style="width: 100%; height: 100%; position: left;">
+    </div>
+    <div class="displayBoard">
+      <div id="timer">Time: 60 s</div>
+      <div id="score">Score: 0</div>
+    </div>
+    <div class="arrowCount">
+      <img id="bagImg" src="sprites/bag1.png" alt="" style="width: 100%; height: 100%; position: left;">
+      <p id="arrowCount" style="width: 200px">10</p>
+    </div>
+  </div>
+  
+  <div id="gameOverMenu">
+    <img id="menu-bg" src="sprites/menu-bg.png" alt="">
+    <h1>Game Over!</h1>
+    <p id="endScore">Score: </p>
+    <button onclick="restartGame()">Restart</button>
+    <button onclick="window.location.href='index.html'">Main Menu</button>
+    <button onclick="exitGame()">Exit</button>
+  </div>
+  
+  <div id="gameArea">
+    <p id="incScore"></p>
+    <div id="powerBorder">
+      <div id="powerBar"></div>
+    </div>
+    <div id="target">
+      <img src="sprites/target.png" alt="" style="width: 100%; height: 100%; position: inherit;">
+    </div>
+    <div id="arrow">
+      <img src="sprites/arrow.png" alt="=======" style="width: 100%; height: 100%; position: inherit;">
+    </div>
+    <div id="bow">
+      <img src="sprites/bow1.png" alt="}" style="width: 100%; height: 100%; position: inherit;">
+    </div>
+  </div>
+
+<script>
+  
+</script>
+</body>
+</html>
