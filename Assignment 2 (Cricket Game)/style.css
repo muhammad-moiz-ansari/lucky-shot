@@ -7,9 +7,35 @@
 
   body {
     margin: 0;
-    background: rgba(201, 184, 162, 0.634);
+    height: 100vh;  /* Height fixed to browser window */
+    background: rgba(0, 0, 0);
     font-family: 'Cinzel', serif;
     user-select: none;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  #game-container {
+    height: 100%;
+    /*
+    width: 1180px;
+    max-width: 1180px;
+    */
+    aspect-ratio: 2744 / 1568;
+
+    /* Forces the container to NEVER shrink below 1000px 
+    flex-shrink: 0;
+    */
+
+    /* Background Image */
+    background-image: url("sprites/field.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    position: relative;
+    overflow: hidden;
   }
 
   #gameOverMenu h1, #main-menu h1 {
@@ -83,7 +109,7 @@
 
   #bg-img{
     object-fit: cover;
-    filter: brightness(0.6);
+    filter: brightness(0.95);
     transition: filter 0.3s ease;
   }
 
@@ -131,12 +157,12 @@
     justify-content: space-between;
   }
   
-  .target-scores {
+  .restart-btn {
     position: absolute;
-    top: 15px;
-    left: 15px;
-    width: 170px;
-    height: 130px;
+    top: 10px;
+    left: 10px;
+    width: 140px;
+    height: 60px;
   }
 
   .arrowCount {
@@ -157,16 +183,16 @@
     box-shadow: 0 4px 4px 2.5px rgba(0, 0, 0, 0.299);
   }
 
-  .displayBoard {
+  .option-btns {
     position: absolute;
     top: 5px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 6px;
+    gap: 10px;
     margin-top: 5px;
     position: absolute;
     width: 100%;
@@ -215,43 +241,59 @@
     overflow: hidden;
   }
 
-  #bow {
+  #wicket {
     position: absolute;
-    top: 60%;
-    left: 25px;
+    top: 80%;
+    left: 5%;
     font-size: 104px;
     color: rgb(105, 71, 34);
-    width: 73px;
+    width: 9px;
     height: 130px;
-    transform: translateY(-50%);  /* To bring bow's center equal to arrow's height */
+    transform: translateY(-50%);  /* To bring wicket's center equal to arrow's height */
   }
 
-  #arrow {
+  #batter {
     position: absolute;
-    top: 55%;
-    left: 64px;
-    width: 91px;
-    height: 9px;
+    /*
+    top: 48%;
+    left: -31px;
+    width: 370px;
+    height: 300px;
+    */
+    top: 60%;
+    left: 15%;
+    width: 100px;
+    height: 200px;
     display: block;
   }
 
-  #target {
+  #ball {
     position: absolute;
     top: 48%;/*287px;*/
     right: 50px;
-    width: 50px;
-    height: 110px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     background-color: white;
   }  
 
+  #pitch {
+    position: absolute;
+    top: 88%;
+    left: 50%;
+    width: 94.5%;
+    height: 66px;
+    background-color: rgb(83, 83, 83);
+    transform: translate(-50%, -50%);
+  }
+
   #powerBorder {
     position: absolute;
-    top: 40%;
-    left: 25px;
+    top: 75%;
+    left: 480px;
 
     background-color: rgb(83, 83, 83);
-    width: 90px;
+    width: 250px;
     height: 22px;
     display: block;
     border: 5px groove rgb(104, 104, 104);
@@ -269,3 +311,17 @@
     display: block;
     transition: all 0.2s linear;
   }
+
+  /*720px*/
+@media (max-width: 1180px) {
+  .option-btns {
+    flex-direction: column;
+    gap: 5px;
+  }
+}
+
+@media (max-height: 720px) {
+  #pitch {
+    top: 88%;
+  }
+}
