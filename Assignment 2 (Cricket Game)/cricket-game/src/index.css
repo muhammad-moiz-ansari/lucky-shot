@@ -24,11 +24,14 @@
     width: 1180px;
     max-width: 1180px;
     */
-    aspect-ratio: 2744 / 1568;
+    aspect-ratio: 7 / 4;    /*2744 / 1568;*/
 
     /* Forces the container to NEVER shrink below 1000px 
     flex-shrink: 0;
     */
+
+    /* Refernce point for scaling fonts */
+    container-type: size;
 
     /* Background Image */
     background-image: url("assets/field.png");
@@ -243,6 +246,70 @@
     overflow: hidden;
   }
 
+#scoreBoard {
+  position: 'absolute'; 
+  top: '38%';     /* Pushes it down into the billboard */
+  left: '31.5%';  /* Pushes it right into the billboard */
+  width: '37%';   /* Matches the width of the black screen */
+  height: '27%';  /* Matches the height of the black screen */
+  display: 'flex';
+  align-items: 'center';
+  justify-content: 'space-evenly';
+  background-color: 'transparent'; /* Keeps the stadium background visible */
+  /*font-family: 'Arial, sans-serif';   /* Matches your reference image style */
+}
+
+.board-left {
+  border: '0.4cqw solid #70d6ff'; /* 0.4cqw makes the border scale too! */
+  width: '45%';
+  height: '80%';
+  display: 'flex';
+  justify-content: 'center';
+  align-items: 'center';
+}
+
+.runs-text {
+  color: #70d6ff; 
+  font-size: 12cqw; 
+  font-weight: 900;
+  line-height: 1;
+}
+
+.board-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 80%;
+  width: 40%;
+  gap: 1.5cqw;
+}
+
+.stat-row {
+  display: flex; 
+  align-items: center; 
+  gap: 2cqw;
+}
+
+.stat-text {
+  color: white; 
+  font-size: 6cqw; 
+  font-weight: bold;
+}
+
+/* Temporary shapes until you add your actual img tags for the ball/wicket */
+.ball-icon {
+  width: 4cqw; 
+  height: 4cqw; 
+  background-color: red; 
+  border-radius: 50%;
+}
+
+.wicket-icon {
+  width: 4cqw; 
+  height: 4cqw; 
+  background-color: #fcd57a;
+}
+
   #wicket {
     position: absolute;
     top: 80%;
@@ -256,9 +323,10 @@
 
   #batter {
     position: absolute;
+    aspect-ratio: 1180/786;
     top: 48%;
     left: -31px;
-    width: 370px;
+    /*width: 360px;*/
     height: 300px;
     /*
     top: 60%;
