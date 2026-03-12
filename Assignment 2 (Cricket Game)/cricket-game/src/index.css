@@ -247,30 +247,32 @@
   }
 
 #scoreBoard {
-  position: 'absolute'; 
-  top: '38%';     /* Pushes it down into the billboard */
-  left: '31.5%';  /* Pushes it right into the billboard */
-  width: '37%';   /* Matches the width of the black screen */
-  height: '27%';  /* Matches the height of the black screen */
-  display: 'flex';
-  align-items: 'center';
-  justify-content: 'space-evenly';
-  background-color: 'transparent'; /* Keeps the stadium background visible */
-  /*font-family: 'Arial, sans-serif';   /* Matches your reference image style */
+  position: absolute; 
+  top: 40.5%;     /* Pushes it down into the billboard */
+  left: 37%;  /* Pushes it right into the billboard */
+  width: 25.5%;   /* Matches the width of the black screen */
+  height: 24%;  /* Matches the height of the black screen */
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  background-color: transparent; /* Keeps the stadium background visible */
+  font-family: Arial, sans-serif;   /* Matches your reference image style */
+  z-index: 10; /* Ensures it sits on top of everything else */
 }
 
 .board-left {
-  border: '0.4cqw solid #70d6ff'; /* 0.4cqw makes the border scale too! */
-  width: '45%';
-  height: '80%';
-  display: 'flex';
-  justify-content: 'center';
-  align-items: 'center';
+  border: 0.4cqw solid #70d6ff; /* 0.4cqw makes the border scale too! */
+  border-style: groove;
+  width: 45%;
+  height: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .runs-text {
   color: #70d6ff; 
-  font-size: 12cqw; 
+  font-size: 8cqw; 
   font-weight: 900;
   line-height: 1;
 }
@@ -287,12 +289,12 @@
 .stat-row {
   display: flex; 
   align-items: center; 
-  gap: 2cqw;
+  gap: 1cqw;
 }
 
 .stat-text {
   color: white; 
-  font-size: 6cqw; 
+  font-size: 4.5cqw; 
   font-weight: bold;
 }
 

@@ -4,7 +4,7 @@ function App() {
   // VARIABLES
   /*
   */
-  const [runs, setRuns] = useState(0);
+  const [runs, setRuns] = useState(60);
   const [wickets, setWickets] = useState(0);
   const [ballsDone, setBallsDone] = useState(0);
   const [power, setPower] = useState(0);
