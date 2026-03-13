@@ -63,7 +63,6 @@ function App() {
           </div>
           {/* Right Side: Balls and Wickets Stats */}
           <div className="board-right">
-              
               {/* Balls Left Row */}
               <div className="stat-row">
                   <div className="ball-icon"></div>
@@ -79,13 +78,20 @@ function App() {
                       {wickets}
                   </span>
               </div>
-
           </div>
         </div>
 
         {/* Power Bar */}
-        <div id="powerBorder">
-          <div id="powerBar"></div>
+        <div className="powerBar-box">
+          <div className="segment wicket" style={{ width: '40%' }}>Wicket</div>
+          <div className="segment zero" style={{ width: '10%' }}>0</div>
+          <div className="segment one" style={{ width: '10%' }}>1</div>
+          <div className="segment two" style={{ width: '10%' }}>2</div>
+          <div className="segment three" style={{ width: '5%' }}>3</div>
+          <div className="segment four" style={{ width: '10%' }}>4</div>
+          <div className="segment six" style={{ width: '15%' }}>6</div>
+          
+          <div className="slider" id="moving-slider"></div>
         </div>
         
         {/* Field */}
