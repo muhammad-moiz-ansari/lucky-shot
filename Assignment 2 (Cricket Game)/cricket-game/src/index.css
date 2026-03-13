@@ -275,7 +275,7 @@ button {
 }
 
 .runs-text {
-  color: #70d6ff; 
+  color: #ffffff; 
   font-size: 8cqw; 
   font-weight: 900;
   line-height: 1;
@@ -306,10 +306,9 @@ button {
 .ball-icon {
   width: 4cqw; 
   height: 4cqw; 
-  background-color: red; 
   border-radius: 50%;
 
-  background-image: url("assets/ball3.png");
+  background-image: url("assets/ball5.png");
   background-size: 100% 100%;
   background-color: transparent;
   border: none;
@@ -321,7 +320,6 @@ button {
   */ 
   width: 4cqw;
   height: 4cqw; 
-  background-color: #fcd57a;
   /*
   aspect-ratio: 197/343;
   */
@@ -335,12 +333,12 @@ button {
 
   #wicket {
     position: absolute;
-    top: 80%;
+    top: 86%;
     left: 5%;
     font-size: 104px;
     color: rgb(105, 71, 34);
     width: 0.6%;
-    height: 16%;/*130px;*/
+    height: 14%;/*130px;*/
     transform: translateY(-50%);  /* To bring wicket's center equal to arrow's height */
     z-index: 2;
   }
@@ -348,7 +346,7 @@ button {
   #batter {
     position: absolute;
     aspect-ratio: 1180/786;
-    top: 58%;
+    top: 61.5%;
     left: -2%;
     /*width: 360px;*/
     height: 33%;
@@ -364,10 +362,10 @@ button {
 
   #ball {
     position: absolute;
+    aspect-ratio: 1/1;
     top: 48%;/*287px;*/
     right: 50px;
-    width: 25px;
-    height: 25px;
+    height: 2.8%;
     border-radius: 50%;
     background-color: white;
     z-index: 4;
@@ -375,7 +373,7 @@ button {
 
   #pitch {
     position: absolute;
-    top: 88%;
+    top: 91%;
     left: 50%;
     width: 94.5%;
     height: 8.5%;
@@ -414,11 +412,5 @@ button {
   .option-btns {
     flex-direction: column;
     gap: 5px;
-  }
-}
-
-@media (max-height: 720px) {
-  #pitch {
-    top: 88%;
   }
 }
