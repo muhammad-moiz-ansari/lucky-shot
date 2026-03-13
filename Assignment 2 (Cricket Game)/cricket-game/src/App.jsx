@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const agg_stats = [
   { outcome: 'Wicket', prob: 40, name: 'wicket' },
@@ -20,23 +20,40 @@ const def_stats = [
   { outcome: '6', prob: 5, name: 'six' }
 ];
 
+
 function App() {
   // VARIABLES
   const [runs, setRuns] = useState(60);
   const [wickets, setWickets] = useState(0);
   const [ballsDone, setBallsDone] = useState(0);
-  const [power, setPower] = useState(0);
+  const [sliderPos, setSliderPosition] = useState(0);
   const [battingStyle, setBattingStyle] = useState('Aggressive');
   const [gameOver, setGameOver] = useState(false);
 
   const curr_stats = battingStyle === 'Aggressive' ? agg_stats : def_stats;
+  const direction = useRef(1);    // 1 for right, -1 for left
 
+  /* Slider Movement Loop */
+  useEffect(() => {
+    const sliderLoop = setInterval(() => {
+      setSliderPosition((prevPos) => {
+        if (prevPos >= 98)
+          direction.current = -1;
+        if (prevPos <= 0)
+          direction.current = 1;
+
+        return prevPos + direction.current;
+      });
+    }, 15);
+    return () => clearInterval(sliderLoop);
+  }, []);
 
   const restartGame = () => {
     setRuns(0);
     setWickets(0);
     setBallsDone(0);
-    setPower(0);
+    setSliderPosition(0);
+    direction.current = 1;
     //setBattingStyle('Aggressive');
     setGameOver(false);
   };
@@ -71,7 +88,7 @@ function App() {
         </div>
       */}
       <div style={{display: 'none'}}>
-        {power}{battingStyle}{gameOver.toString()}
+        {gameOver.toString()}
       </div>
       
       <div id="gameArea">
@@ -111,7 +128,7 @@ function App() {
             </div>
           ))}
           
-          <div className="slider" id="moving-slider"></div>
+          <div className="slider" id="moving-slider" style={{ left: `${sliderPos}%` }}></div>
         </div>
         
         {/* Field */}
