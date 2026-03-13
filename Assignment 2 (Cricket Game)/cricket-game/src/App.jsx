@@ -1,25 +1,43 @@
 import { useState } from 'react';
 
+const agg_stats = [
+  { outcome: 'Wicket', prob: 40, name: 'wicket' },
+  { outcome: '0', prob: 10, name: 'zero' },
+  { outcome: '1', prob: 10, name: 'one' },
+  { outcome: '2', prob: 10, name: 'two' },
+  { outcome: '3', prob: 5, name: 'three' },
+  { outcome: '4', prob: 10, name: 'four' },
+  { outcome: '6', prob: 15, name: 'six' }
+];
+
+const def_stats = [
+  { outcome: 'Wicket', prob: 20, name: 'wicket' },
+  { outcome: '0', prob: 20, name: 'zero' },
+  { outcome: '1', prob: 20, name: 'one' },
+  { outcome: '2', prob: 15, name: 'two' },
+  { outcome: '3', prob: 10, name: 'three' },
+  { outcome: '4', prob: 10, name: 'four' },
+  { outcome: '6', prob: 5, name: 'six' }
+];
+
 function App() {
   // VARIABLES
-  /*
-  */
   const [runs, setRuns] = useState(60);
   const [wickets, setWickets] = useState(0);
   const [ballsDone, setBallsDone] = useState(0);
   const [power, setPower] = useState(0);
-  const [battingStyle, setBattingStyle] = useState('Defensive');
+  const [battingStyle, setBattingStyle] = useState('Aggressive');
   const [gameOver, setGameOver] = useState(false);
 
-  // Dummy functions to stop React from crashing when you click buttons
+  const curr_stats = battingStyle === 'Aggressive' ? agg_stats : def_stats;
+
+
   const restartGame = () => {
-    /*
-    */
     setRuns(0);
     setWickets(0);
     setBallsDone(0);
     setPower(0);
-    setBattingStyle('Defensive');
+    //setBattingStyle('Aggressive');
     setGameOver(false);
   };
   //const exitGame = () => console.log("Exit clicked");
@@ -32,8 +50,12 @@ function App() {
           <img src="/assets/restart_btn.png" alt="Restart" style={{ float: 'left' }} />
         </button>
         <div className="option-btns">
-          <button style={{ color: 'red' }}>Aggressive</button>
-          <button style={{ color: 'gold' }}>Defensive</button>
+          <button style={{ color: 'red' }} onClick={() => setBattingStyle('Aggressive')}>
+            Aggressive
+          </button>
+          <button style={{ color: 'gold' }} onClick={() => setBattingStyle('Defensive')}>
+            Defensive
+          </button>
         </div>
       </div>
       
@@ -83,13 +105,11 @@ function App() {
 
         {/* Power Bar */}
         <div className="powerBar-box">
-          <div className="segment wicket" style={{ width: '40%' }}>Wicket</div>
-          <div className="segment zero" style={{ width: '10%' }}>0</div>
-          <div className="segment one" style={{ width: '10%' }}>1</div>
-          <div className="segment two" style={{ width: '10%' }}>2</div>
-          <div className="segment three" style={{ width: '5%' }}>3</div>
-          <div className="segment four" style={{ width: '10%' }}>4</div>
-          <div className="segment six" style={{ width: '15%' }}>6</div>
+          {curr_stats.map((stat, index) => (
+            <div key={index} className={`segment ${stat.name}`} style={{width: `${stat.prob}%`}}>
+              {stat.outcome}
+            </div>
+          ))}
           
           <div className="slider" id="moving-slider"></div>
         </div>
