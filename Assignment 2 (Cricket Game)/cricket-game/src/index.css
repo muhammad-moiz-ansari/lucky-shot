@@ -16,6 +16,7 @@
     justify-content: center;
     align-items: center;
     overflow: hidden;
+    font-family: 'Cinzel', serif;
   }
 
   #game-container {
@@ -129,25 +130,28 @@
     transition: filter 0.3s ease;
   }
 
-  button {
-    font-family: 'Cinzel', serif;
-    display: inline-block;
-    color: white;
-    text-align: center;
-    text-decoration: none;
-    background-color: var(--btn-color);
-    padding: 13px 25px;
-    width: 160px;
-    font-size: 17px;
+button {
+  font-family: 'Russo One', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 
-    background-image: url("assets/button.png");
-    background-size: 100% 100%;
-    background-color: transparent;
-    border: none;
-    background-repeat: no-repeat;
+  display: inline-block;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  background-color: var(--btn-color);
+  padding: 13px 25px;
+  width: 160px;
+  font-size: 17px;
 
-    transition: all 0.3s ease;
-  }
+  background-image: url("assets/button.png");
+  background-size: 100% 100%;
+  background-color: transparent;
+  border: none;
+  background-repeat: no-repeat;
+
+  transition: all 0.3s ease;
+}
 
   button:hover {
     filter: brightness(1.2);
@@ -256,8 +260,8 @@
   align-items: center;
   justify-content: space-evenly;
   background-color: transparent; /* Keeps the stadium background visible */
-  font-family: Arial, sans-serif;   /* Matches your reference image style */
-  z-index: 10; /* Ensures it sits on top of everything else */
+  font-family: 'Chakra Petch', sans-serif;
+  z-index: 0;
 }
 
 .board-left {
@@ -304,12 +308,29 @@
   height: 4cqw; 
   background-color: red; 
   border-radius: 50%;
+
+  background-image: url("assets/ball3.png");
+  background-size: 100% 100%;
+  background-color: transparent;
+  border: none;
+  background-repeat: no-repeat;
 }
 
 .wicket-icon {
-  width: 4cqw; 
+  /*
+  */ 
+  width: 4cqw;
   height: 4cqw; 
   background-color: #fcd57a;
+  /*
+  aspect-ratio: 197/343;
+  */
+
+  background-image: url("assets/wicket-2d.png");
+  background-size: 100% 100%;
+  background-color: transparent;
+  border: none;
+  background-repeat: no-repeat;
 }
 
   #wicket {
