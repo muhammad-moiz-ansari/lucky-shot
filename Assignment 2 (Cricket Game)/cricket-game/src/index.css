@@ -97,8 +97,8 @@
   }
 
   #menu-logo {
-    width: 230px;
-    height: 230px;
+    width: 270px;
+    height: 270px;
     object-fit: cover;
     margin-bottom: 20px;
   }
@@ -121,7 +121,7 @@
 
   #bg-img{
     object-fit: cover;
-    filter: brightness(0.95);
+    filter: brightness(0.65);
     transition: filter 0.3s ease;
   }
 
