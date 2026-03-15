@@ -95,9 +95,33 @@ function App() {
     // Stop slider and animations start
     shot_playing.current = true;
 
-    // TODO
+    // Variables for ball animation
+    const g = 9.81;
+    const v0 = 300;
+    const angle = 0;
+    const angleRad = angle * (Math.PI / 180);
+    const topOffset = 50;
+    let t = 0;
+    let x = 0;
+    let y = topOffset;
+    let direction = 1;
+
     console.log("Ball is pitching...");
-    setBallCoords({ top: 65, right: 85 }); // Example of moving the ball
+    setBallCoords({ top: y, right: x }); // Example of moving the ball
+    const pitchingLoop = setInterval(() => {
+      x = (v0 * Math.cos(angleRad) * t) * direction;
+      y = (topOffset - (v0 * Math.sin(angleRad) * t - 0.5 * g * t * t)) * direction;
+      t += 0.1;
+      console.log(x, y);
+
+      setBallCoords((prevCoords) => {
+        if (prevCoords.right >= 900) {
+          clearInterval(pitchingLoop);
+          return prevCoords;
+        }
+        return { top: y, right: x };
+      });
+    }, 20);
 
     setTimeout(() => {
       console.log("Batter swings!");
@@ -108,17 +132,17 @@ function App() {
       setTimeout(() => {
          console.log("Ball goes flying!");
          // This is where you will use your atan2 angle math to send the ball to the boundary!
-         setBallCoords({ top: 10, right: 120 }); 
+         setBallCoords({ top: 10, right: 10 }); // Example of the ball flying towards the boundary
 
          // --- PHASE 4: RESET FOR NEXT BALL ---
          setTimeout(() => {
            // Update score, balls bowled, and reset the pitch
            shot_playing.current = false;
            setBatterSprite('idle.png');
-           setBallCoords({ top: 48, right: 50 });
+           setBallCoords({ top: topOffset, right: 0 });
          }, 1000); // Reset after 1 second of flying
 
-      }, 200); // 200ms after the swing starts, the bat hits the ball
+      }, 500); // 200ms after the swing starts, the bat hits the ball
 
     }, 800); // 800ms after pitch starts
 

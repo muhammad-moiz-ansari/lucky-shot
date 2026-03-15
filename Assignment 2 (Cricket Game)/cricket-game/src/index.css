@@ -362,16 +362,16 @@ button {
     z-index: 3;
   }
 
-  #ball {
-    position: absolute;
-    aspect-ratio: 1/1;
-    top: 48%;/*287px;*/
-    right: 50px;
-    height: 2.8%;
-    border-radius: 50%;
-    background-color: white;
-    z-index: 4;
-  }  
+#ball {
+  position: absolute;
+  aspect-ratio: 1 / 1;
+  top: 70%;
+  right: 50px;
+  height: 2.8%;
+  border-radius: 50%;
+  background-color: white;
+  z-index: 4;
+}  
 
   #pitch {
     position: absolute;
