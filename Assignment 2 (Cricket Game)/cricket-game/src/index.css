@@ -179,6 +179,7 @@ button {
   left: 10px;
   width: 140px;
   height: 60px;
+  z-index: 50;
 }
 
 .playShot-btn {
@@ -198,21 +199,21 @@ button {
 }
   
 
-  .option-btns {
-    position: absolute;
-    top: 5px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    margin-top: 5px;
-    position: absolute;
-    width: 100%;
-    z-index: 10;    
-  }
+.option-btns {
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 5px;
+  position: absolute;
+  width: 100%;
+  z-index: 10;    
+}
 
   #incScore {
     position: absolute;
@@ -350,14 +351,7 @@ button {
     aspect-ratio: 1180/786;
     top: 61.5%;
     left: -2%;
-    /*width: 360px;*/
     height: 33%;
-    /*
-    top: 60%;
-    left: 15%;
-    width: 100px;
-    height: 200px;
-    */
     display: block;
     z-index: 3;
   }
