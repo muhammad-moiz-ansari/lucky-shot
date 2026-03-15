@@ -524,7 +524,7 @@ button:active, .button-pressed:active {
   #game-container {
     height: 100vh;
   }
-  #menu-btns {
+  .menu-btns {
     display: flex;
     flex-direction: row;
     gap: 8px;
