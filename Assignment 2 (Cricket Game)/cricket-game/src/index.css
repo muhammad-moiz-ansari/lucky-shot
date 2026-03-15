@@ -146,9 +146,11 @@ button {
   text-align: center;
   text-decoration: none;
   background-color: var(--btn-color);
-  padding: 13px 25px;
-  width: 160px;
-  font-size: 17px;
+  
+  /* RESPONSIVE SIZING HERE */
+  width: clamp(100px, 15cqw, 160px);         /* Shrinks to 100px on mobile */
+  font-size: clamp(11px, 1.5cqw, 17px);      /* Scales font down cleanly */
+  padding: clamp(8px, 1cqw, 13px) clamp(10px, 2cqw, 25px); /* Scales padding */
 
   background-image: url("assets/button.png");
   background-size: 100% 100%;
@@ -177,8 +179,9 @@ button:hover {
   position: absolute;
   top: 10px;
   left: 10px;
-  width: 140px;
-  height: 60px;
+  aspect-ratio: 1 / 1;
+  width: clamp(30px, 5cqw, 50px); /* Keeps it proportional, but tappable on mobile */
+  margin: 1px;
   z-index: 50;
 }
 
@@ -187,7 +190,8 @@ button:hover {
   top: 20%;
   left: 50%;
   aspect-ratio: 1 / 1;
-  width: 7%;
+  width: clamp(40px, 8cqw, 110px); /* Ensures it never gets too tiny to press */  
+  height: clamp(40px, 8cqw, 110px);
   margin: 1px;
   transform: translateX(-50%);
   z-index: 50;
@@ -318,8 +322,8 @@ button:hover {
   width: 4cqw;
   height: 4cqw; 
   /*
-  aspect-ratio: 197/343;
   */
+  aspect-ratio: 532/720;
 
   background-image: url("assets/wicket-2d.png");
   background-size: 100% 100%;

@@ -326,7 +326,7 @@ function App() {
       {/* Navbar */}
       <div className="navbar">
         <button className="restart-btn" onClick={restartGame}>
-          <img src="/assets/restart_btn.png" alt="Restart" style={{ float: 'left' }} />
+          <img src="/assets/restart.png" alt="Restart" style={{ width: '100%', height: '100%' }} />
         </button>
         <div className="option-btns">
           <button style={{ color: 'red' }} onClick={() => setBattingStyle('Aggressive')}>
