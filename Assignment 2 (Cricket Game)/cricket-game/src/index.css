@@ -174,6 +174,14 @@ button {
   transition: all 0.15s ease-out;
 }
 
+.button-pressed, .button-pressed:hover {
+  filter: brightness(0.95);
+  transform: translateY(1px); /* Physically pushes DOWN into the screen */
+  box-shadow: 
+    inset 0px 4px 8px rgba(0, 0, 0, 0.4), /* Deep internal shadow to simulate being pressed */
+    0px 2px 3px rgba(0, 0, 0, 0.3); /* Outer shadow almost disappears */
+}
+
 button:hover {
   filter: brightness(1.15);
   color: rgb(240, 230, 200); /* Slight gold tint to the text on hover */
@@ -185,7 +193,7 @@ button:hover {
   cursor: pointer;
 }  
 
-button:active {
+button:active, .button-pressed:active {
   filter: brightness(0.9);
   transform: translateY(3px); /* Physically pushes DOWN into the screen */
   box-shadow: 
