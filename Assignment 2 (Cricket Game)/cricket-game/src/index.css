@@ -1,28 +1,3 @@
-/* RESPONSIVENESS GUIDE 
-
-container-type: size; (The Mini-Universe) 
-  Makes a container independent. Elements inside will size themselves based only on this container, 
-  ignoring the rest of the page.
-
-cqm: Container Query Units
-  cqw = 1% of the container's width
-  cqh = 1% of the container's height
-  cqi = 1% of the container's inline size (width in LTR languages)
-  cqb = 1% of the container's block size (height in LTR languages)
-
-
-clamp(MIN, IDEAL, MAX) (The Safety Net) 
-  Scales a size fluidly, but strictly stops it from ever getting too small or too large.
-
-aspect-ratio (Shape Lock) 
-  Locks an element's proportions so it never looks stretched or squished when the screen resizes.
-
-Relative Positioning (% & transform) 
-  Uses percentages instead of exact pixels so elements stay perfectly placed and centered, no matter the screen size.
-  
-*/
-
-
 :root {
     --bg-color: skyblue;
     --cream-color: antiquewhite;
@@ -52,10 +27,6 @@ Relative Positioning (% & transform)
 
 #game-container {
   height: 100%;
-  /*
-  width: 1180px;
-  max-width: 1180px;
-  */
   aspect-ratio: 7 / 4;    /*2744 / 1568;*/
 
   /* Forces the container to NEVER shrink below 1000px 
@@ -291,6 +262,16 @@ button:active, .button-pressed:active {
   width: 100%;
   z-index: 10;    
 }
+
+.menu-btns {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Pop-up score */
 
   #incScore {
     position: absolute;
@@ -538,3 +519,38 @@ button:active, .button-pressed:active {
     top: 15px;
   }
 }
+
+@media (max-height: 500px) {
+  #game-container {
+    height: 100vh;
+  }
+  #menu-btns {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+  }
+}
+
+/* RESPONSIVENESS GUIDE 
+
+container-type: size; (The Mini-Universe) 
+  Makes a container independent. Elements inside will size themselves based only on this container, 
+  ignoring the rest of the page.
+
+cqm: Container Query Units
+  cqw = 1% of the container's width
+  cqh = 1% of the container's height
+  cqi = 1% of the container's inline size (width in LTR languages)
+  cqb = 1% of the container's block size (height in LTR languages)
+
+
+clamp(MIN, IDEAL, MAX) (The Safety Net) 
+  Scales a size fluidly, but strictly stops it from ever getting too small or too large.
+
+aspect-ratio (Shape Lock) 
+  Locks an element's proportions so it never looks stretched or squished when the screen resizes.
+
+Relative Positioning (% & transform) 
+  Uses percentages instead of exact pixels so elements stay perfectly placed and centered, no matter the screen size.
+  
+*/

@@ -5,8 +5,10 @@ export default function MainMenu({ restartGame, exitGame }) {
       <div id="main-menu">
         <img id="menu-bg" src="/assets/menu-bg.png" alt=""/>
         <img id="menu-logo" src="/assets/logo.png" alt="Archer Icon"/>
-        <button onClick={restartGame}>Start Game</button>
-        <button onClick={exitGame}>Exit Game</button>
+        <div className="menu-btns">    
+            <button onClick={restartGame}>Start Game</button>
+            <button onClick={exitGame}>Exit Game</button>
+        </div>
       </div>
     </>
   );
