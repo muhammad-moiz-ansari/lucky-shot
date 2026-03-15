@@ -141,6 +141,30 @@
     transition: filter 0.3s ease;
   }
 
+.commentary-box {
+  position: absolute;
+  top: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  
+  background-color: rgba(0, 0, 0, 0.75);
+  color: white;
+  font-family: 'Chakra Petch', sans-serif;
+  
+  /* Responsiveness */
+  padding: clamp(5px, 1cqw, 10px) clamp(15px, 3cqw, 30px);
+  font-size: clamp(12px, 2cqw, 18px);
+  border-radius: 5px;
+  border: 1px solid #70d6ff;
+  
+  text-align: center;
+  white-space: nowrap; /* Keeps the text on one single line */
+  z-index: 50;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
+
+  transition: all 0.3s ease;
+}
+
 /******************************
 *                             *
 *           BUTTONS           *

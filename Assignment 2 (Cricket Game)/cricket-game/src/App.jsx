@@ -8,6 +8,18 @@ import ScoreBoard from './components/ScoreBoard';
 import PowerBar from './components/PowerBar';
 import PlayShotButton from './components/PlayShotButton';
 import FieldElements from './components/FieldElements';
+import CommentaryBox from './components/CommentaryBox';
+
+
+const commentaryLines = {
+  '0': ["Solid defense, no run.", "Played straight to the fielder.", "A dot ball, building the pressure."],
+  '1': ["Just a single, rotating the strike.", "Tapped away for a quick run.", "Easy single taken there."],
+  '2': ["Pushed into the gap, they'll come back for two.", "Good running between the wickets!", "Nicely timed, easy two runs."],
+  '3': ["Brilliant placement! They push hard for three.", "Excellent running, saving a boundary but getting three.", "Three runs added to the total."],
+  '4': ["Shot! One bounce and over the ropes for four!", "Cracking drive! That's a boundary.", "Threaded through the gap beautifully for four."],
+  '6': ["BOOM! Out of the park for a massive SIX!", "He's absolutely smashed that one! Six runs!", "High, handsome, and into the stands!"],
+  'Wicket': ["OUT! Knocked him over!", "He's gone! The stumps are shattered!", "What a delivery! The batter has no answer."]
+};
 
 const agg_stats = [
   { outcome: '1', prob: 10, name: 'one' },
@@ -149,6 +161,7 @@ function resetGameVisuals(gameAreaRef, navBarRef) {
 
 function App() {
   // VARIABLES
+  const [commentary, setCommentary] = useState("Welcome to Lucky Shot! Press Play Shot to begin.");
   const [runs, setRuns] = useState(0);
   const [wickets, setWickets] = useState(0);
   const [ballsDone, setBallsDone] = useState(0);
@@ -202,12 +215,14 @@ function App() {
     setGameOver(false);
     setIsMainMenu(false);
     resetGameVisuals(gameAreaRef, navBarRef);
+    setCommentary("Welcome to Lucky Shot! Press Play Shot to begin.");
   };
 
   const goToMenu = () => {
     setIsMainMenu(true);
     setGameOver(false);
     resetGameVisuals(gameAreaRef, navBarRef);
+    setCommentary("Welcome to Lucky Shot! Press Play Shot to begin.");
   };
 
   const exitGame = () => {
@@ -231,6 +246,11 @@ function App() {
     const wicketDistanceFromRight = gameBox.width - (wicketRef.current.getBoundingClientRect().left - gameBox.left + wicketRef.current.getBoundingClientRect().width);
 
     const outcome = getShotOutcome(sliderPos, curr_stats);
+
+    // Generating commentary
+    const lines = commentaryLines[outcome];
+    const randomLine = lines[Math.floor(Math.random() * lines.length)];
+    setCommentary(randomLine);
 
     // Variable for ball miss or hit
     let miss = false;
@@ -402,6 +422,8 @@ function App() {
         )}
         
         <div id="gameArea" ref={gameAreaRef}>
+          <CommentaryBox commentary={commentary} />
+
           <PlayShotButton playShot={playShot} />
 
           <ScoreBoard runs={runs} ballsDone={ballsDone} wickets={wickets} />

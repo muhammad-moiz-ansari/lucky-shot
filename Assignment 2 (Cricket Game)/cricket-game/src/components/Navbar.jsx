@@ -4,7 +4,7 @@ const Navbar = forwardRef(({ restartGame, battingStyle, setBattingStyle }, ref) 
   return (
     <div className="navbar" ref={ref}>
       <button className="restart-btn" onClick={restartGame}>
-        <img src="/assets/restart1.png" alt="Restart" style={{ width: '100%', height: '100%' }} />
+        <img src="/assets/restart2.png" alt="Restart" style={{ width: '100%', height: '100%' }} />
       </button>
       <div className="option-btns">
         <button 
