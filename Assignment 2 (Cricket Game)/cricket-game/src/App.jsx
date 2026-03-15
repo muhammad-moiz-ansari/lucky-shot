@@ -99,6 +99,45 @@ function resetWicket(wicketRef) {
   }
 }
 
+// Update Game State
+function updateGameState(outcome, runs, setRuns, wickets, setWickets, ballsDone, setBallsDone, setGameOver, maxWickets, gameAreaRef, navBarRef) {
+  if (outcome === 'Wicket') {
+    setWickets(wickets + 1);
+    if (wickets + 1 >= maxWickets) {
+      triggerGameOver(setGameOver, gameAreaRef, navBarRef);
+    }
+  }
+  else {
+    const addRuns = Number(outcome);
+    setRuns(runs + addRuns);
+  }
+  setBallsDone(ballsDone + 1);
+  if (ballsDone + 1 >= 12) {
+    triggerGameOver(setGameOver, gameAreaRef, navBarRef);
+  }
+}
+
+// Game Over
+function triggerGameOver(setGameOver, gameAreaRef, navBarRef) {
+  setGameOver(true);
+  if (gameAreaRef.current) {
+    gameAreaRef.current.classList.add("dimmed");
+  }
+  if (navBarRef.current) {
+    navBarRef.current.classList.add("dimmed");
+  }
+}
+
+function resetGameVisuals(gameAreaRef, navBarRef) {
+  if (gameAreaRef.current) {
+    gameAreaRef.current.classList.remove("dimmed");
+  }
+  if (navBarRef.current) {
+    navBarRef.current.classList.remove("dimmed");
+  }
+}
+
+
 function App() {
   // VARIABLES
   const [runs, setRuns] = useState(0);
@@ -107,6 +146,7 @@ function App() {
   const [sliderPos, setSliderPosition] = useState(0);
   const [battingStyle, setBattingStyle] = useState('Aggressive');
   const [gameOver, setGameOver] = useState(false);
+  const [isMainMenu, setIsMainMenu] = useState(false);
   const [ballCoords, setBallCoords] = useState({ top: 48, right: -100 }); 
   const [batterSprite, setBatterSprite] = useState('idle.png');
 
@@ -117,6 +157,7 @@ function App() {
 
   // For batter's coordinates during the shot for trajectory calculations
   const gameAreaRef = useRef(null);
+  const navBarRef = useRef(null);
   const batterRef = useRef(null);
   const wicketRef = useRef(null);
 
@@ -150,6 +191,18 @@ function App() {
     direction.current = 1;
     //setBattingStyle('Aggressive');
     setGameOver(false);
+    setIsMainMenu(false);
+    resetGameVisuals(gameAreaRef, navBarRef);
+  };
+
+  const goToMenu = () => {
+    setIsMainMenu(true);
+    setGameOver(false);
+    resetGameVisuals(gameAreaRef, navBarRef);
+  };
+
+  const exitGame = () => {
+    window.close();
   };
 
   const playShot = () => {
@@ -173,15 +226,12 @@ function App() {
     // Variable for ball miss or hit
     let miss = false;
     let waitDuration = 1000; // Default wait duration for runs
-    if (outcome === 'Wicket') {
+    if (outcome === 'Wicket')
       miss = true;
-    }
-    else if (outcome === '0') {
-      waitDuration = 1300; // Longer wait bcz ball is slow
-    }
-    else if (outcome === '1') {
+    else if (outcome === '0')
+      waitDuration = 1400; // Longer wait bcz ball is slow
+    else if (outcome === '1')
       waitDuration = 1100;
-    }
     
 
     // Variables for ball animation
@@ -274,6 +324,9 @@ function App() {
               shot_playing.current = false;
               setBatterSprite('idle.png');
               setBallCoords({ top: topOffset, right: -100 });
+
+              // Update game state
+              updateGameState(outcome, runs, setRuns, wickets, setWickets, ballsDone, setBallsDone, setGameOver, maxWickets, gameAreaRef, navBarRef);
             }, waitDuration); 
 
           }, 10); // Adjust this delay (10ms) so the ball shoots off exactly when the bat hits it visually
@@ -292,6 +345,9 @@ function App() {
           setBatterSprite('idle.png');
           setBallCoords({ top: topOffset, right: -100 });
           resetWicket(wicketRef);
+
+          // Update game state
+          updateGameState(outcome, runs, setRuns, wickets, setWickets, ballsDone, setBallsDone, setGameOver, maxWickets, gameAreaRef, navBarRef);
         }, 1500); // Let the player see brocken wickets and be sad :) 
       }
 
@@ -304,27 +360,12 @@ function App() {
         return { top: y, right: x };
       });
     }, 20);
-
-    if (outcome === 'Wicket') {
-      setWickets(wickets + 1);
-      if (wickets + 1 >= maxWickets) {
-        setGameOver(true);
-      }
-    }
-    else {
-      const addRuns = Number(outcome);
-      setRuns(runs + addRuns);
-    }
-    setBallsDone(ballsDone + 1);
-    if (ballsDone + 1 >= 12) {
-      setGameOver(true);
-    }
   };
 
   return (
     <div id="game-container">
       {/* Navbar */}
-      <div className="navbar">
+      <div className="navbar" ref={navBarRef}>
         <button className="restart-btn" onClick={restartGame}>
           <img src="/assets/restart1.png" alt="Restart" style={{ width: '100%', height: '100%' }} />
         </button>
@@ -339,16 +380,18 @@ function App() {
       </div>
       
       {/* Gameover Menu */}
-      {/* 
+      {!isMainMenu && gameOver && (
         <div id="gameOverMenu">
           <img id="menu-bg" src="/assets/menu-bg.png" alt="" />
           <h1>Game Over!</h1>
-          <p id="endScore">Score: </p>
+          <p style={{ marginBottom: '0px' }}>Score: {runs}</p>
+          <p style={{ margin: '0px' }}>Wickets gone: {wickets}</p>
+          <p style={{ marginTop: '0px' }}>Balls left: {12 - ballsDone}</p>
           <button onClick={restartGame}>Restart</button>
-          <button onClick={() => window.location.href='index.html'}>Main Menu</button>
+          <button onClick={goToMenu}>Main Menu</button>
           <button onClick={exitGame}>Exit</button>
         </div>
-      */}
+      )}
       <div style={{display: 'none'}}>
         {gameOver.toString()}
       </div>

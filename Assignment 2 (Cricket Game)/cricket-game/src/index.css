@@ -136,38 +136,11 @@
     transition: filter 0.3s ease;
   }
 
-button {
-  font-family: 'Russo One', sans-serif;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-
-  display: inline-block;
-  color: white;
-  text-align: center;
-  text-decoration: none;
-  background-color: var(--btn-color);
-  
-  /* RESPONSIVE SIZING HERE */
-  width: clamp(100px, 15cqw, 160px);         /* Shrinks to 100px on mobile */
-  font-size: clamp(11px, 1.5cqw, 17px);      /* Scales font down cleanly */
-  padding: clamp(8px, 1cqw, 13px) clamp(10px, 2cqw, 25px); /* Scales padding */
-
-  background-image: url("assets/button.png");
-  background-size: 100% 100%;
-  background-color: transparent;
-  border: none;
-  background-repeat: no-repeat;
-
-  transition: all 0.3s ease;
-}
-
-button:hover {
-  filter: brightness(1.2);
-  color:rgb(214, 214, 214);
-  transform: translateY(-3px);
-  box-shadow: 0 3px 4px 3px #180e009b;
-  cursor: pointer;
-}  
+/******************************
+*                             *
+*           BUTTONS           *
+*                             *
+*******************************/
 
 button {
   /* Font and layout */
@@ -232,6 +205,8 @@ button:active {
   left: 10px;
   aspect-ratio: 1 / 1;
   width: clamp(30px, 5cqw, 50px); /* Keeps it proportional, but tappable on mobile */
+  height: clamp(30px, 5cqw, 50px);
+  border: none;
   margin: 1px;
   border-radius: 50%;
   padding: 0px;
@@ -255,7 +230,7 @@ button:active {
 }
 
 .playShot-btn:hover {
-  /* We combine the horizontal centering WITH the vertical jump */
+  /* Combine the horizontal centering WITH the vertical jump */
   transform: translate(-50%, -3px); 
 }
 
