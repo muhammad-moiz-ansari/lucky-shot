@@ -1,48 +1,79 @@
 import { useState, useEffect, useRef } from 'react';
 
 const agg_stats = [
-  { outcome: 'Wicket', prob: 40, name: 'wicket' },
-  { outcome: '0', prob: 10, name: 'zero' },
   { outcome: '1', prob: 10, name: 'one' },
   { outcome: '2', prob: 10, name: 'two' },
   { outcome: '3', prob: 5, name: 'three' },
   { outcome: '4', prob: 10, name: 'four' },
-  { outcome: '6', prob: 15, name: 'six' }
+  { outcome: 'Wicket', prob: 40, name: 'wicket' },
+  { outcome: '6', prob: 15, name: 'six' },
+  { outcome: '0', prob: 10, name: 'zero' }
 ];
 
 const def_stats = [
-  { outcome: 'Wicket', prob: 20, name: 'wicket' },
-  { outcome: '0', prob: 20, name: 'zero' },
   { outcome: '1', prob: 20, name: 'one' },
   { outcome: '2', prob: 15, name: 'two' },
   { outcome: '3', prob: 10, name: 'three' },
   { outcome: '4', prob: 10, name: 'four' },
-  { outcome: '6', prob: 5, name: 'six' }
+  { outcome: 'Wicket', prob: 20, name: 'wicket' },
+  { outcome: '6', prob: 5, name: 'six' },
+  { outcome: '0', prob: 20, name: 'zero' }
 ];
 
+function getShotOutcome(sliderPos, curr_stats) {
+  let outcome = null;
+
+  if (sliderPos <= curr_stats[0].prob)
+    outcome = curr_stats[0].outcome;
+  else if (sliderPos <= curr_stats[0].prob + curr_stats[1].prob)
+    outcome = curr_stats[1].outcome;
+  else if (sliderPos <= curr_stats[0].prob + curr_stats[1].prob + curr_stats[2].prob)
+    outcome = curr_stats[2].outcome;
+  else if (sliderPos <= curr_stats[0].prob + curr_stats[1].prob + curr_stats[2].prob + curr_stats[3].prob)
+    outcome = curr_stats[3].outcome;
+  else if (sliderPos <= curr_stats[0].prob + curr_stats[1].prob + curr_stats[2].prob + curr_stats[3].prob + curr_stats[4].prob)
+    outcome = curr_stats[4].outcome;
+  else if (sliderPos <= curr_stats[0].prob + curr_stats[1].prob + curr_stats[2].prob + curr_stats[3].prob + curr_stats[4].prob + curr_stats[5].prob)
+    outcome = curr_stats[5].outcome;
+  else
+    outcome = curr_stats[6].outcome;
+
+  return outcome;
+}
 
 function App() {
   // VARIABLES
-  const [runs, setRuns] = useState(60);
+  const [runs, setRuns] = useState(0);
   const [wickets, setWickets] = useState(0);
   const [ballsDone, setBallsDone] = useState(0);
   const [sliderPos, setSliderPosition] = useState(0);
   const [battingStyle, setBattingStyle] = useState('Aggressive');
   const [gameOver, setGameOver] = useState(false);
+  const [ballCoords, setBallCoords] = useState({ top: 48, right: -1 }); 
+  const [batterSprite, setBatterSprite] = useState('idle.png');
 
+  const maxWickets = 2;
   const curr_stats = battingStyle === 'Aggressive' ? agg_stats : def_stats;
   const direction = useRef(1);    // 1 for right, -1 for left
+  const shot_playing = useRef(false);
 
   /* Slider Movement Loop */
   useEffect(() => {
     const sliderLoop = setInterval(() => {
       setSliderPosition((prevPos) => {
+        let newPos;
+        
         if (prevPos >= 98)
           direction.current = -1;
         if (prevPos <= 0)
           direction.current = 1;
+        
+        if (shot_playing.current)
+          newPos = prevPos;
+        else
+          newPos = prevPos + direction.current;
 
-        return prevPos + direction.current;
+        return newPos;
       });
     }, 15);
     return () => clearInterval(sliderLoop);
@@ -57,7 +88,53 @@ function App() {
     //setBattingStyle('Aggressive');
     setGameOver(false);
   };
-  //const exitGame = () => console.log("Exit clicked");
+
+  const playShot = () => {
+    if (gameOver || shot_playing.current) return;
+    
+    // Stop slider and animations start
+    shot_playing.current = true;
+
+    // TODO
+    console.log("Ball is pitching...");
+    setBallCoords({ top: 65, right: 85 }); // Example of moving the ball
+
+    setTimeout(() => {
+      console.log("Batter swings!");
+      // Change the batter image state to trigger the swing animation
+      setBatterSprite('swing.png'); 
+
+      // --- PHASE 3: THE HIT & TRAJECTORY ---
+      setTimeout(() => {
+         console.log("Ball goes flying!");
+         // This is where you will use your atan2 angle math to send the ball to the boundary!
+         setBallCoords({ top: 10, right: 120 }); 
+
+         // --- PHASE 4: RESET FOR NEXT BALL ---
+         setTimeout(() => {
+           // Update score, balls bowled, and reset the pitch
+           shot_playing.current = false;
+           setBatterSprite('idle.png');
+           setBallCoords({ top: 48, right: 50 });
+         }, 1000); // Reset after 1 second of flying
+
+      }, 200); // 200ms after the swing starts, the bat hits the ball
+
+    }, 800); // 800ms after pitch starts
+
+    const outcome = getShotOutcome(sliderPos, curr_stats);
+    if (outcome === 'Wicket') {
+      setWickets(wickets + 1);
+      if (wickets + 1 >= maxWickets) {
+        setGameOver(true);
+      }
+    }
+    else {
+      const addRuns = Number(outcome);
+      setRuns(runs + addRuns);
+    }
+    setBallsDone(ballsDone + 1);
+  };
 
   return (
     <div id="game-container">
@@ -92,6 +169,11 @@ function App() {
       </div>
       
       <div id="gameArea">
+        {/* Play Shot Button */}
+        <button className="playShot-btn" onClick={playShot}>
+          <img src="/assets/playShot.png" alt="Play Shot" style={{ width: '100%', height: '100%' }}/>
+        </button>
+
         {/* Score Board */}
         <div id="scoreBoard">
           {/* Left Side: The Blue Runs Box */}
@@ -135,14 +217,14 @@ function App() {
         <div id="pitch">
           <img src="/assets/pitch.png" alt="" style={{ width: '100%', height: '100%', position: 'inherit' }} />
         </div>
-        <div id="ball">
+        <div id="ball" style={{ top: `${ballCoords.top}%`, right: `${ballCoords.right}px` }}>
           <img src="/assets/ball2.png" alt="" style={{ width: '100%', height: '100%', position: 'inherit' }} />
         </div>
         <div id="batter">
           <img src="/assets/idle.png" alt="" style={{ width: '100%', height: '100%', position: 'inherit' }} />
         </div>
         <div id="wicket">
-          <img src="/assets/wicket.png" alt="" style={{ width: '100%', height: '100%', position: 'inherit' }} />
+          <img src={`/assets/${batterSprite}`} alt="" style={{ width: '100%', height: '100%', position: 'inherit' }} />
         </div>
       </div>
     </div>
