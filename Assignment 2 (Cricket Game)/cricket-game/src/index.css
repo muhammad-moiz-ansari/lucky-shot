@@ -248,6 +248,7 @@ button:active, .button-pressed:active {
   border-radius: 50%;
   padding: 0px;
   background-image: none;
+  filter: hue-rotate(10deg);
   z-index: 50;
 }
 

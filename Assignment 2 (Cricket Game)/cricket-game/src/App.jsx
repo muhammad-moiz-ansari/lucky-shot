@@ -201,7 +201,7 @@ function App() {
 
         return newPos;
       });
-    }, 15);
+    }, 10);   // Adjust this for slider speed (lower is faster)
     return () => clearInterval(sliderLoop);
   }, []);
 
