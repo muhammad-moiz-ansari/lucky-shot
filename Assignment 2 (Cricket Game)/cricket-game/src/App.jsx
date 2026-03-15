@@ -1,5 +1,14 @@
 import { useState, useEffect, useRef } from 'react';
 
+// COMPONENTS
+import MainMenu from './components/MainMenu';
+import GameOverMenu from './components/GameOverMenu';
+import Navbar from './components/Navbar';
+import ScoreBoard from './components/ScoreBoard';
+import PowerBar from './components/PowerBar';
+import PlayShotButton from './components/PlayShotButton';
+import FieldElements from './components/FieldElements';
+
 const agg_stats = [
   { outcome: '1', prob: 10, name: 'one' },
   { outcome: '2', prob: 10, name: 'two' },
@@ -364,119 +373,47 @@ function App() {
 
   return (
     <div id="game-container">
-      {/* =========================================
-                 SCREEN 1: MAIN MENU 
-      =========================================== */}
+      
+      {/* SCREEN 1: MAIN MENU */}
       {isMainMenu && (
-        <>
-          <img id="bg-img" src="/assets/bg-main.png" alt=""/>
-          <div id="main-menu">
-            <img id="menu-bg" src="/assets/menu-bg.png" alt=""/>
-            <img id="menu-logo" src="/assets/logo.png" alt="Archer Icon"/>
-            <button onClick={restartGame}>Start Game</button>
-            <button onClick={exitGame}>Exit Game</button>
-          </div>
-        </>
+        <MainMenu restartGame={restartGame} exitGame={exitGame} />
       )}
 
-      {/* =========================================
-                 SCREEN 3: THE GAME SCREEN 
-      =========================================== */}
-      {/* We only render the game if we are NOT on the main menu */}
+      {/* SCREEN 2: THE GAME SCREEN */}
       {!isMainMenu && (
       <>
-        {/* Navbar */}
-        <div className="navbar" ref={navBarRef}>
-          <button className="restart-btn" onClick={restartGame}>
-            <img src="/assets/restart1.png" alt="Restart" style={{ width: '100%', height: '100%' }} />
-          </button>
-          <div className="option-btns">
-            <button className={battingStyle === 'Aggressive' ? 'button-pressed' : ''} style={{ color: 'red' }} onClick={() => setBattingStyle('Aggressive')}>
-              Aggressive
-            </button>
-            <button className={battingStyle === 'Defensive' ? 'button-pressed' : ''} style={{ color: 'gold' }} onClick={() => setBattingStyle('Defensive')}>
-              Defensive
-            </button>
-          </div>
-        </div>
+        <Navbar 
+          ref={navBarRef}
+          restartGame={restartGame} 
+          battingStyle={battingStyle} 
+          setBattingStyle={setBattingStyle} 
+        />
         
-        {/* =========================================
-                  SCREEN 2: GAME OVER 
-        =========================================== */}
-        {!isMainMenu && gameOver && (
-          <div id="gameOverMenu">
-            <img id="menu-bg" src="/assets/menu-bg.png" alt="" />
-            <h1>Game Over!</h1>
-            <p style={{ marginBottom: '0px' }}>Score: {runs}</p>
-            <p style={{ margin: '0px' }}>Wickets gone: {wickets}</p>
-            <p style={{ marginTop: '0px' }}>Balls left: {12 - ballsDone}</p>
-            <button onClick={restartGame}>Restart</button>
-            <button onClick={goToMenu}>Main Menu</button>
-            <button onClick={exitGame}>Exit</button>
-          </div>
+        {/* SCREEN 3: GAME OVER (Overlays the game) */}
+        {gameOver && (
+          <GameOverMenu 
+            runs={runs} 
+            wickets={wickets} 
+            ballsDone={ballsDone} 
+            restartGame={restartGame} 
+            goToMenu={goToMenu} 
+            exitGame={exitGame} 
+          />
         )}
-        <div style={{display: 'none'}}>
-          {gameOver.toString()}
-        </div>
         
         <div id="gameArea" ref={gameAreaRef}>
-          {/* Play Shot Button */}
-          <button className="playShot-btn" onClick={playShot}>
-            <img src="/assets/playShot.png" alt="Play Shot" style={{ width: '100%', height: '100%' }}/>
-          </button>
+          <PlayShotButton playShot={playShot} />
 
-          {/* Score Board */}
-          <div id="scoreBoard">
-            {/* Left Side: The Blue Runs Box */}
-            <div className="board-left">
-                <span className="runs-text">
-                    {runs}
-                </span>
-            </div>
-            {/* Right Side: Balls and Wickets Stats */}
-            <div className="board-right">
-                {/* Balls Left Row */}
-                <div className="stat-row">
-                    <div className="ball-icon"></div>
-                    <span className="stat-text">
-                        {12 - ballsDone}
-                    </span>
-                </div>
-                
-                {/* Wickets Row */}
-                <div className="stat-row">
-                    <div className="wicket-icon"></div>
-                    <span className="stat-text">
-                        {wickets}
-                    </span>
-                </div>
-            </div>
-          </div>
-
-          {/* Power Bar */}
-          <div className="powerBar-box">
-            {curr_stats.map((stat, index) => (
-              <div key={index} className={`segment ${stat.name}`} style={{width: `${stat.prob}%`}}>
-                {stat.outcome}
-              </div>
-            ))}
-            
-            <div className="slider" id="moving-slider" style={{ left: `${sliderPos}%` }}></div>
-          </div>
+          <ScoreBoard runs={runs} ballsDone={ballsDone} wickets={wickets} />
           
-          {/* Field */}
-          <div id="pitch">
-            <img src="/assets/pitch.png" alt="" style={{ width: '100%', height: '100%', position: 'inherit' }} />
-          </div>
-          <div id="ball" style={{ top: `${ballCoords.top}%`, right: `${ballCoords.right}px` }}>
-            <img src="/assets/ball2.png" alt="" style={{ width: '100%', height: '100%', position: 'inherit' }} />
-          </div>
-          <div id="batter" ref={batterRef}>
-            <img src={`/assets/${batterSprite}`} alt="" style={{ width: '100%', height: '100%', position: 'inherit' }} />
-          </div>
-          <div id="wicket" ref={wicketRef}>
-            <img src="/assets/wicket.png" alt="" style={{ width: '100%', height: '100%', position: 'inherit' }} />
-          </div>
+          <PowerBar curr_stats={curr_stats} sliderPos={sliderPos} />
+          
+          <FieldElements 
+            ballCoords={ballCoords} 
+            batterSprite={batterSprite} 
+            batterRef={batterRef} 
+            wicketRef={wicketRef} 
+          />
         </div>
       </>
       )}
@@ -484,4 +421,4 @@ function App() {
   );
 }
 
-export default App
+export default App;
