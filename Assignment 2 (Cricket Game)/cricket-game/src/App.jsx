@@ -110,7 +110,7 @@ function App() {
   const [ballCoords, setBallCoords] = useState({ top: 48, right: -100 }); 
   const [batterSprite, setBatterSprite] = useState('idle.png');
 
-  const maxWickets = 10;
+  const maxWickets = 2;
   const curr_stats = battingStyle === 'Aggressive' ? agg_stats : def_stats;
   const direction = useRef(1);    // 1 for right, -1 for left
   const shot_playing = useRef(false);
@@ -297,7 +297,7 @@ function App() {
 
       setBallCoords((prevCoords) => {
         console.log(x, y);
-        if (prevCoords.right >= 1500) {
+        if (prevCoords.right >= 2000) {
           clearInterval(pitchingLoop);
           return prevCoords;
         }
@@ -326,7 +326,7 @@ function App() {
       {/* Navbar */}
       <div className="navbar">
         <button className="restart-btn" onClick={restartGame}>
-          <img src="/assets/restart.png" alt="Restart" style={{ width: '100%', height: '100%' }} />
+          <img src="/assets/restart1.png" alt="Restart" style={{ width: '100%', height: '100%' }} />
         </button>
         <div className="option-btns">
           <button style={{ color: 'red' }} onClick={() => setBattingStyle('Aggressive')}>
