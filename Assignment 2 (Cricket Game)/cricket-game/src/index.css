@@ -1,3 +1,27 @@
+/* RESPONSIVENESS GUIDE 
+
+container-type: size; (The Mini-Universe) 
+  Makes a container independent. Elements inside will size themselves based only on this container, 
+  ignoring the rest of the page.
+
+cqm: Container Query Units
+  cqw = 1% of the container's width
+  cqh = 1% of the container's height
+  cqi = 1% of the container's inline size (width in LTR languages)
+  cqb = 1% of the container's block size (height in LTR languages)
+
+
+clamp(MIN, IDEAL, MAX) (The Safety Net) 
+  Scales a size fluidly, but strictly stops it from ever getting too small or too large.
+
+aspect-ratio (Shape Lock) 
+  Locks an element's proportions so it never looks stretched or squished when the screen resizes.
+
+Relative Positioning (% & transform) 
+  Uses percentages instead of exact pixels so elements stay perfectly placed and centered, no matter the screen size.
+*/
+
+
 :root {
     --bg-color: skyblue;
     --cream-color: antiquewhite;
