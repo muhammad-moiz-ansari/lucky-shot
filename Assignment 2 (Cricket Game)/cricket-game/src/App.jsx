@@ -96,26 +96,39 @@ function App() {
     shot_playing.current = true;
 
     // Variables for ball animation
+    const groundLvl = 90;
+    const bounce = 1.6;
+    const friction = 0.99;
     const g = 9.81;
-    const v0 = 300;
-    const angle = 0;
-    const angleRad = angle * (Math.PI / 180);
-    const topOffset = 50;
-    let t = 0;
+    const v0 = 260;
+    //const angle = 0;
+    //const angleRad = angle * (Math.PI / 180);
+    const topOffset = 60;
+    const dt = 0.1;
+    //let t = 0;
     let x = 0;
     let y = topOffset;
-    let direction = 1;
+    let vx = v0;
+    let vy = 0;
 
     console.log("Ball is pitching...");
     setBallCoords({ top: y, right: x }); // Example of moving the ball
     const pitchingLoop = setInterval(() => {
-      x = (v0 * Math.cos(angleRad) * t) * direction;
-      y = (topOffset - (v0 * Math.sin(angleRad) * t - 0.5 * g * t * t)) * direction;
-      t += 0.1;
-      console.log(x, y);
+      vy -= g * dt;
+      x += vx * dt;   //(v0 * Math.cos(angleRad) * t);
+      y -= vy * dt;   //(topOffset - (v0 * Math.sin(angleRad) * t - 0.5 * g * t * t));
+      //t += 0.1;
+      console.log(x, y, vy);
+
+      if (y >= groundLvl) {
+        console.log("Ball bounces at " + x, y);
+        y  = groundLvl;
+        vy -= vy * bounce;
+        vx *= friction;
+      }
 
       setBallCoords((prevCoords) => {
-        if (prevCoords.right >= 900) {
+        if (prevCoords.right >= 1500) {
           clearInterval(pitchingLoop);
           return prevCoords;
         }
