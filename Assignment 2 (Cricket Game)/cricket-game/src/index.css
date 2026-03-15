@@ -159,19 +159,19 @@ button {
   transition: all 0.3s ease;
 }
 
-  button:hover {
-    filter: brightness(1.2);
-    color:rgb(214, 214, 214);
-    transform: translateY(-3px);
-    box-shadow: 0 3px 4px 3px #180e009b;
-    cursor: pointer;
-  }  
+button:hover {
+  filter: brightness(1.2);
+  color:rgb(214, 214, 214);
+  transform: translateY(-3px);
+  box-shadow: 0 3px 4px 3px #180e009b;
+  cursor: pointer;
+}  
   
-  .navbar {
-    display: flex;
-    justify-content: space-between;
-    z-index: 50;
-  }
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  z-index: 50;
+}
   
 .restart-btn {
   position: absolute;
@@ -346,22 +346,22 @@ button {
   z-index: 2;
 }
 
-  #batter {
-    position: absolute;
-    aspect-ratio: 1180/786;
-    top: 61.5%;
-    left: -2%;
-    height: 33%;
-    display: block;
-    z-index: 3;
-  }
+#batter {
+  position: absolute;
+  aspect-ratio: 1180/786;
+  top: 61.5%;
+  left: -2%;
+  height: 33%;
+  display: block;
+  z-index: 3;
+}
 
 #ball {
   position: absolute;
   aspect-ratio: 1 / 1;
   top: 70%;
   right: 50px;
-  height: 2.8%;
+  width: 1.4%;
   border-radius: 50%;
   background-color: white;
   z-index: 4;

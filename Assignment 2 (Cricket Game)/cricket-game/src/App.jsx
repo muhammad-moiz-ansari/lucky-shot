@@ -74,7 +74,7 @@ function getShotVelocity(outcome) {
     return { vx: 200, vy: 5 };
   } 
   else { // '0'
-    return { vx: 190, vy: 5 };
+    return { vx: 200, vy: 5 };
   }
 }
 
@@ -179,13 +179,18 @@ function App() {
     else if (outcome === '0') {
       waitDuration = 1300; // Longer wait bcz ball is slow
     }
+    else if (outcome === '1') {
+      waitDuration = 1100;
+    }
+    
 
     // Variables for ball animation
     const groundLvl = 90;
     const bounce = 1.6;
     const friction = 0.99;
     const g = 9.81;
-    const v0 = 260;
+    const speedMultiplier = 0.26; 
+    const v0 = gameBox.width * speedMultiplier;
     const topOffset = 60;
     const dt = 0.1;
     let x = -100;
@@ -311,6 +316,9 @@ function App() {
       setRuns(runs + addRuns);
     }
     setBallsDone(ballsDone + 1);
+    if (ballsDone + 1 >= 12) {
+      setGameOver(true);
+    }
   };
 
   return (
