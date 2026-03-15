@@ -74,10 +74,30 @@ function getShotVelocity(outcome) {
     return { vx: 200, vy: 5 };
   } 
   else { // '0'
-    return { vx: 200, vy: 5 };
+    return { vx: 190, vy: 5 };
   }
 }
 
+// Knock the wicket down
+function animateWicket(wicketRef) {
+  if (wicketRef.current) {
+    // Smooth physics transition
+    wicketRef.current.style.transition = "transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+    
+    // Rotate it backwards and push it to the left (flying stumps!)
+    // We keep translateY(-50%) because we used that in your CSS to center it
+    wicketRef.current.style.transform = "translateY(-80%) rotate(-75deg) translateX(-50px)";
+  }
+}
+
+// Stand the wicket back up for the next ball
+function resetWicket(wicketRef) {
+  if (wicketRef.current) {
+    wicketRef.current.style.transition = "none";
+    // Reset back to the default CSS
+    wicketRef.current.style.transform = "translateY(-50%)"; 
+  }
+}
 
 function App() {
   // VARIABLES
@@ -90,7 +110,7 @@ function App() {
   const [ballCoords, setBallCoords] = useState({ top: 48, right: -100 }); 
   const [batterSprite, setBatterSprite] = useState('idle.png');
 
-  const maxWickets = 2;
+  const maxWickets = 10;
   const curr_stats = battingStyle === 'Aggressive' ? agg_stats : def_stats;
   const direction = useRef(1);    // 1 for right, -1 for left
   const shot_playing = useRef(false);
@@ -98,6 +118,7 @@ function App() {
   // For batter's coordinates during the shot for trajectory calculations
   const gameAreaRef = useRef(null);
   const batterRef = useRef(null);
+  const wicketRef = useRef(null);
 
   /* Slider Movement Loop */
   useEffect(() => {
@@ -140,19 +161,23 @@ function App() {
     // Grabbing batter's coordinates for trajectory calculations
     const gameBox = gameAreaRef.current.getBoundingClientRect();
     const batterBox = batterRef.current.getBoundingClientRect();
-
-    // Calculate the batter's center point relative to the game area
-    //const batterCenterY = (batterBox.top - gameBox.top) + (batterBox.height * 0.8); // 0.8 is to adjust the hit point to be around the bat's contact area
     
     // Batter's distance from the right side!
     const batterDistanceFromRight = gameBox.width - (batterBox.left - gameBox.left + batterBox.width * 0.8);
+
+    // Wicket's distance from the right side!
+    const wicketDistanceFromRight = gameBox.width - (wicketRef.current.getBoundingClientRect().left - gameBox.left + wicketRef.current.getBoundingClientRect().width);
 
     const outcome = getShotOutcome(sliderPos, curr_stats);
 
     // Variable for ball miss or hit
     let miss = false;
+    let waitDuration = 1000; // Default wait duration for runs
     if (outcome === 'Wicket') {
       miss = true;
+    }
+    else if (outcome === '0') {
+      waitDuration = 1300; // Longer wait bcz ball is slow
     }
 
     // Variables for ball animation
@@ -175,6 +200,7 @@ function App() {
     //////////////////////////////////
     console.log("Ball is pitching...");
     let hasSwung = false;
+    let hasHitWicket = false;
 
     setBallCoords({ top: y, right: x }); // Example of moving the ball
     const pitchingLoop = setInterval(() => {
@@ -194,58 +220,74 @@ function App() {
       // If the ball crosses the threshold(to be hit position) and the batter hasn't swung yet...
       if (!hasSwung && x >= (batterDistanceFromRight - 20)) {
         hasSwung = true;
-        
         console.log("Batter swings!");
         animateBatterShot(setBatterSprite); 
 
         // --- THE HIT ---
-        // Give the sprite animation a split second to reach the "contact" frame
-        setTimeout(() => {
-          console.log("Ball goes flying!");
-          clearInterval(pitchingLoop); // Stop the pitching physics entirely
-           
-          ///////////////////////////////////
-          //                               //
-          // --- THE RETURN TRAJECTORY --- //
-          //                               //
-          ///////////////////////////////////
-
-          // Getting new velocities based on the shot outcome
-          const { vx: returnVx, vy: returnVy } = getShotVelocity(outcome);
-          vx = returnVx;
-          vy = returnVy;
-          
-          // Ball returning animation loop
-          setBallCoords({ top: y, right: x });
-          const returnLoop = setInterval(() => {
-            vy -= g * dt;
-            x -= vx * dt;   
-            y -= vy * dt;   
-            console.log(x, y, vy);
-
-            if (y >= groundLvl) {
-              y  = groundLvl;
-              vy -= vy * bounce;
-              vx *= friction;
-            }
-
-            setBallCoords((prevCoords) => {
-              if (prevCoords.right <= -100) {
-                clearInterval(returnLoop);
-                return prevCoords;
-              }
-              return { top: y, right: x };
-            });
-          }, 20);
-
-          // --- PHASE 4: RESET ---
+        if (!miss) {
+          // Give the sprite animation a split second to reach the "contact" frame
           setTimeout(() => {
-            shot_playing.current = false;
-            setBatterSprite('idle.png');
-            setBallCoords({ top: topOffset, right: -100 });
-          }, 1000); 
+            console.log("Ball goes flying!");
+            clearInterval(pitchingLoop); // Stop the pitching physics entirely
+            
+            ///////////////////////////////////
+            //                               //
+            // --- THE RETURN TRAJECTORY --- //
+            //                               //
+            ///////////////////////////////////
 
-        }, 10); // Adjust this delay (10ms) so the ball shoots off exactly when the bat hits it visually
+            // Getting new velocities based on the shot outcome
+            const { vx: returnVx, vy: returnVy } = getShotVelocity(outcome);
+            vx = returnVx;
+            vy = returnVy;
+            
+            // Ball returning animation loop
+            setBallCoords({ top: y, right: x });
+            const returnLoop = setInterval(() => {
+              vy -= g * dt;
+              x -= vx * dt;   
+              y -= vy * dt;   
+              console.log(x, y, vy);
+
+              if (y >= groundLvl) {
+                y  = groundLvl;
+                vy -= vy * bounce;
+                vx *= friction;
+              }
+
+              setBallCoords((prevCoords) => {
+                if (prevCoords.right <= -100) {
+                  clearInterval(returnLoop);
+                  return prevCoords;
+                }
+                return { top: y, right: x };
+              });
+            }, 20);
+
+            // --- BATTER RESET AFTER HIT ---
+            setTimeout(() => {
+              shot_playing.current = false;
+              setBatterSprite('idle.png');
+              setBallCoords({ top: topOffset, right: -100 });
+            }, waitDuration); 
+
+          }, 10); // Adjust this delay (10ms) so the ball shoots off exactly when the bat hits it visually
+        }
+        
+      }
+      // --- THE MISS (WICKET) ---
+      if (miss && !hasHitWicket && x >= wicketDistanceFromRight) {
+        hasHitWicket = true;
+        console.log("Ball missed! It's a wicket.");
+        animateWicket(wicketRef); 
+        
+        // --- BATTER RESET AFTER WICKET ---
+        setTimeout(() => {
+          shot_playing.current = false;
+          setBatterSprite('idle.png');
+          setBallCoords({ top: topOffset, right: -100 });
+          resetWicket(wicketRef);
+        }, 1500); // Let the player see brocken wickets and be sad :) 
       }
 
       setBallCoords((prevCoords) => {
@@ -358,7 +400,7 @@ function App() {
         <div id="batter" ref={batterRef}>
           <img src={`/assets/${batterSprite}`} alt="" style={{ width: '100%', height: '100%', position: 'inherit' }} />
         </div>
-        <div id="wicket">
+        <div id="wicket" ref={wicketRef}>
           <img src="/assets/wicket.png" alt="" style={{ width: '100%', height: '100%', position: 'inherit' }} />
         </div>
       </div>
