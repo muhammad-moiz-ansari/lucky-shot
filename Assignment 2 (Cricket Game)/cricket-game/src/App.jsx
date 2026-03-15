@@ -41,6 +41,44 @@ function getShotOutcome(sliderPos, curr_stats) {
   return outcome;
 }
 
+function animateBatterShot(setBatterSprite) {
+  //let shotAnimation = true;
+  let i = 1;
+
+  const shotLoop = setInterval(() => {
+    setBatterSprite("shot_sprites/" + i + ".png");
+    i++;
+    if (i > 8) {
+      clearInterval(shotLoop);
+    }
+  }, 18);
+}
+
+function getShotVelocity(outcome) {
+  if (outcome == '1') {
+    return { vx: 250, vy: 10 };
+  } 
+  else if (outcome == '2') {
+    return { vx: 300, vy: 15 };
+  } 
+  else if (outcome == '3') {
+    return { vx: 350, vy: 20 };
+  } 
+  else if (outcome == '4') {
+    return { vx: 400, vy: 30 };
+  } 
+  else if (outcome == '6') {
+    return { vx: 500, vy: 50 };
+  } 
+  else if (outcome == 'Wicket') {
+    return { vx: 200, vy: 5 };
+  } 
+  else { // '0'
+    return { vx: 200, vy: 5 };
+  }
+}
+
+
 function App() {
   // VARIABLES
   const [runs, setRuns] = useState(0);
@@ -49,13 +87,17 @@ function App() {
   const [sliderPos, setSliderPosition] = useState(0);
   const [battingStyle, setBattingStyle] = useState('Aggressive');
   const [gameOver, setGameOver] = useState(false);
-  const [ballCoords, setBallCoords] = useState({ top: 48, right: -1 }); 
+  const [ballCoords, setBallCoords] = useState({ top: 48, right: -100 }); 
   const [batterSprite, setBatterSprite] = useState('idle.png');
 
   const maxWickets = 2;
   const curr_stats = battingStyle === 'Aggressive' ? agg_stats : def_stats;
   const direction = useRef(1);    // 1 for right, -1 for left
   const shot_playing = useRef(false);
+
+  // For batter's coordinates during the shot for trajectory calculations
+  const gameAreaRef = useRef(null);
+  const batterRef = useRef(null);
 
   /* Slider Movement Loop */
   useEffect(() => {
@@ -95,39 +137,119 @@ function App() {
     // Stop slider and animations start
     shot_playing.current = true;
 
+    // Grabbing batter's coordinates for trajectory calculations
+    const gameBox = gameAreaRef.current.getBoundingClientRect();
+    const batterBox = batterRef.current.getBoundingClientRect();
+
+    // Calculate the batter's center point relative to the game area
+    //const batterCenterY = (batterBox.top - gameBox.top) + (batterBox.height * 0.8); // 0.8 is to adjust the hit point to be around the bat's contact area
+    
+    // Batter's distance from the right side!
+    const batterDistanceFromRight = gameBox.width - (batterBox.left - gameBox.left + batterBox.width * 0.8);
+
+    const outcome = getShotOutcome(sliderPos, curr_stats);
+
+    // Variable for ball miss or hit
+    let miss = false;
+    if (outcome === 'Wicket') {
+      miss = true;
+    }
+
     // Variables for ball animation
     const groundLvl = 90;
     const bounce = 1.6;
     const friction = 0.99;
     const g = 9.81;
     const v0 = 260;
-    //const angle = 0;
-    //const angleRad = angle * (Math.PI / 180);
     const topOffset = 60;
     const dt = 0.1;
-    //let t = 0;
-    let x = 0;
+    let x = -100;
     let y = topOffset;
     let vx = v0;
     let vy = 0;
 
+    //////////////////////////////////
+    //                              //
+    //       --- PITCHING ---       //
+    //                              //
+    //////////////////////////////////
     console.log("Ball is pitching...");
+    let hasSwung = false;
+
     setBallCoords({ top: y, right: x }); // Example of moving the ball
     const pitchingLoop = setInterval(() => {
       vy -= g * dt;
-      x += vx * dt;   //(v0 * Math.cos(angleRad) * t);
-      y -= vy * dt;   //(topOffset - (v0 * Math.sin(angleRad) * t - 0.5 * g * t * t));
-      //t += 0.1;
+      x += vx * dt;   
+      y -= vy * dt;   
       console.log(x, y, vy);
 
       if (y >= groundLvl) {
-        console.log("Ball bounces at " + x, y);
+        //console.log("Ball bounces at " + x, y);
         y  = groundLvl;
         vy -= vy * bounce;
         vx *= friction;
       }
 
+      // --- THE DYNAMIC DISTANCE TRIGGER ---
+      // If the ball crosses the threshold(to be hit position) and the batter hasn't swung yet...
+      if (!hasSwung && x >= (batterDistanceFromRight - 20)) {
+        hasSwung = true;
+        
+        console.log("Batter swings!");
+        animateBatterShot(setBatterSprite); 
+
+        // --- THE HIT ---
+        // Give the sprite animation a split second to reach the "contact" frame
+        setTimeout(() => {
+          console.log("Ball goes flying!");
+          clearInterval(pitchingLoop); // Stop the pitching physics entirely
+           
+          ///////////////////////////////////
+          //                               //
+          // --- THE RETURN TRAJECTORY --- //
+          //                               //
+          ///////////////////////////////////
+
+          // Getting new velocities based on the shot outcome
+          const { vx: returnVx, vy: returnVy } = getShotVelocity(outcome);
+          vx = returnVx;
+          vy = returnVy;
+          
+          // Ball returning animation loop
+          setBallCoords({ top: y, right: x });
+          const returnLoop = setInterval(() => {
+            vy -= g * dt;
+            x -= vx * dt;   
+            y -= vy * dt;   
+            console.log(x, y, vy);
+
+            if (y >= groundLvl) {
+              y  = groundLvl;
+              vy -= vy * bounce;
+              vx *= friction;
+            }
+
+            setBallCoords((prevCoords) => {
+              if (prevCoords.right <= -100) {
+                clearInterval(returnLoop);
+                return prevCoords;
+              }
+              return { top: y, right: x };
+            });
+          }, 20);
+
+          // --- PHASE 4: RESET ---
+          setTimeout(() => {
+            shot_playing.current = false;
+            setBatterSprite('idle.png');
+            setBallCoords({ top: topOffset, right: -100 });
+          }, 1000); 
+
+        }, 10); // Adjust this delay (10ms) so the ball shoots off exactly when the bat hits it visually
+      }
+
       setBallCoords((prevCoords) => {
+        console.log(x, y);
         if (prevCoords.right >= 1500) {
           clearInterval(pitchingLoop);
           return prevCoords;
@@ -136,30 +258,6 @@ function App() {
       });
     }, 20);
 
-    setTimeout(() => {
-      console.log("Batter swings!");
-      // Change the batter image state to trigger the swing animation
-      setBatterSprite('swing.png'); 
-
-      // --- PHASE 3: THE HIT & TRAJECTORY ---
-      setTimeout(() => {
-         console.log("Ball goes flying!");
-         // This is where you will use your atan2 angle math to send the ball to the boundary!
-         setBallCoords({ top: 10, right: 10 }); // Example of the ball flying towards the boundary
-
-         // --- PHASE 4: RESET FOR NEXT BALL ---
-         setTimeout(() => {
-           // Update score, balls bowled, and reset the pitch
-           shot_playing.current = false;
-           setBatterSprite('idle.png');
-           setBallCoords({ top: topOffset, right: 0 });
-         }, 1000); // Reset after 1 second of flying
-
-      }, 500); // 200ms after the swing starts, the bat hits the ball
-
-    }, 800); // 800ms after pitch starts
-
-    const outcome = getShotOutcome(sliderPos, curr_stats);
     if (outcome === 'Wicket') {
       setWickets(wickets + 1);
       if (wickets + 1 >= maxWickets) {
@@ -205,7 +303,7 @@ function App() {
         {gameOver.toString()}
       </div>
       
-      <div id="gameArea">
+      <div id="gameArea" ref={gameAreaRef}>
         {/* Play Shot Button */}
         <button className="playShot-btn" onClick={playShot}>
           <img src="/assets/playShot.png" alt="Play Shot" style={{ width: '100%', height: '100%' }}/>
@@ -257,11 +355,11 @@ function App() {
         <div id="ball" style={{ top: `${ballCoords.top}%`, right: `${ballCoords.right}px` }}>
           <img src="/assets/ball2.png" alt="" style={{ width: '100%', height: '100%', position: 'inherit' }} />
         </div>
-        <div id="batter">
-          <img src="/assets/idle.png" alt="" style={{ width: '100%', height: '100%', position: 'inherit' }} />
+        <div id="batter" ref={batterRef}>
+          <img src={`/assets/${batterSprite}`} alt="" style={{ width: '100%', height: '100%', position: 'inherit' }} />
         </div>
         <div id="wicket">
-          <img src={`/assets/${batterSprite}`} alt="" style={{ width: '100%', height: '100%', position: 'inherit' }} />
+          <img src="/assets/wicket.png" alt="" style={{ width: '100%', height: '100%', position: 'inherit' }} />
         </div>
       </div>
     </div>
