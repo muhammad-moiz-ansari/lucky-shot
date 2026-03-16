@@ -143,7 +143,7 @@
 
 .commentary-box {
   position: absolute;
-  top: 8%;
+  top: 11%;
   left: 50%;
   transform: translateX(-50%);
   
@@ -152,8 +152,8 @@
   font-family: 'Chakra Petch', sans-serif;
   
   /* Responsiveness */
-  padding: clamp(5px, 1cqw, 10px) clamp(15px, 3cqw, 30px);
-  font-size: clamp(12px, 2cqw, 18px);
+  padding: clamp(4px, 1cqw, 8px) clamp(13px, 2.6cqw, 27px);
+  font-size: clamp(10px, 1.6cqw, 16px);
   border-radius: 5px;
   border: 1px solid #70d6ff;
   
