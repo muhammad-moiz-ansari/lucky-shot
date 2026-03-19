@@ -36,7 +36,7 @@ The game avoids heavy external animation libraries by using three distinct web-n
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/YOUR_USERNAME/lucky-shot-cricket.git
+   git clone https://github.com/muhammad-moiz-ansari/Web-Programming-Tasks/tree/main/Assignment%202%20(Cricket%20Game)
    ```
 
 2. **Navigate into the directory:**
