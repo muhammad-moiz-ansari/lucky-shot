@@ -36,12 +36,12 @@ The game avoids heavy external animation libraries by using three distinct web-n
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/muhammad-moiz-ansari/Web-Programming-Tasks/tree/main/Assignment%202%20(Cricket%20Game)
+   git clone https://github.com/muhammad-moiz-ansari/lucky-shot
    ```
 
 2. **Navigate into the directory:**
    ```bash
-   cd lucky-shot-cricket
+   cd lucky-shot
    ```
 
 3. **Install dependencies:**
@@ -54,13 +54,15 @@ The game avoids heavy external animation libraries by using three distinct web-n
    npm run dev
    ```
 
-5. **Open your browser and visit `http://localhost:5173/` (or the port provided in your terminal).**
+5. **Open your browser and visit `http://localhost:3000/` (or the port provided in your terminal).**
 
 ## 📁 Project Structure
 
 ```
+├── extra_docs/              # Additional project documentation
 ├── public/
 │   └── assets/              # Sprites, backgrounds, and fonts
+├── report/                  # Final project report and analysis
 ├── src/
 │   ├── components/          # Modular UI components
 │   │   ├── MainMenu.jsx
@@ -73,5 +75,7 @@ The game avoids heavy external animation libraries by using three distinct web-n
 │   ├── App.jsx              # Core logic, physics loop, and state management
 │   ├── index.css            # Global responsive styles and CSS variables
 │   └── main.jsx             # React DOM entry point
-└── package.json
+├── package.json             # Project metadata and dependencies
+├── README.md                # Project documentation
+└── vite.config.js           # Vite configuration
 ```
